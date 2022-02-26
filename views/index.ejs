@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Nudgyt</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+</head>
+
+<body class="container row">
+  <div class="login-con col s6">
+    <h4>Log In</h4>
+    <form id="login-form">
+      <label for="email">Email</label>
+      <input type="email" name="email" id="login-email" placeholder="Email">
+      <label for="password">Password</label>
+      <input type="password" name="password" id="login-password" placeholder="Password">
+      <button class="btn" id="login-btn">Log In</button>
+    </form>
+  </div>
+  <div class="register-con col s6">
+    <h4>Register</h4>
+    <form id="register-form">
+      <label for="name">Name</label>
+      <input type="text" name="name" placeholder="Name">
+      <label for="passowrd">Email</label>
+      <input type="email" name="email" placeholder="Email">
+      <label for="password">Password</label>
+      <input type="password" name="password" placeholder="Password">
+      <button type="submit" class="btn" id="register-btn">Register</button>
+    </form>
+  </div>
+
+  <script>
+    const registerForm = document.getElementById('register-form');
+    registerForm.addEventListener('submit', e => {
+      const name = registerForm.name.value;
+      const email = registerForm.email.value;
+      const password = registerForm.password.value;
+      e.preventDefault();
+      fetch('/create', {
+        method: 'POST',
+        credentials: 'include',
+        body: new URLSearchParams({
+          name,
+          email,
+          password
+        })
+      }).then(resp => resp.json().then(data => ({ status: resp.status, data }))).then(resp => {
+        if (resp.status === 200) {
+          alert('User successfully created.');
+        }
+        else {
+          console.log('Unable to create user.');
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    });
+
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      console.dir(loginForm)
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      console.log(email);
+      console.log(password)
+      fetch('/login', {
+        method: 'POST',
+        credentials: 'include',
+        body: new URLSearchParams({
+          email,
+          password
+        })
+      }).then(resp => resp.json().then(data => ({ status: resp.status, data }))).then(resp => {
+        if (resp.status === 200) {
+          window.location = '/view-users';
+        }
+        else {
+          console.log(resp.data.message);
+        }
+      })
+        .catch(error => {
+          console.log(resp.data.message);
+        });
+    });
+  </script>
+</body>
+
+</html>
