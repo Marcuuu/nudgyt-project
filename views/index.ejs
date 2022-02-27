@@ -48,9 +48,12 @@
       }).then(resp => resp.json().then(data => ({ status: resp.status, data }))).then(resp => {
         if (resp.status === 200) {
           alert('User successfully created.');
+          name.value = '';
+          email.value = '';
+          password.value = '';
         }
         else {
-          console.log('Unable to create user.');
+          alert('Unable to create user.');
         }
       })
       .catch(error => {
@@ -61,11 +64,8 @@
     const loginForm = document.getElementById('login-form');
     loginForm.addEventListener('submit', e => {
       e.preventDefault();
-      console.dir(loginForm)
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
-      console.log(email);
-      console.log(password)
       fetch('/login', {
         method: 'POST',
         credentials: 'include',
@@ -78,11 +78,11 @@
           window.location = '/view-users';
         }
         else {
-          console.log(resp.data.message);
+          alert(resp.data.message);
         }
       })
         .catch(error => {
-          console.log(resp.data.message);
+          alert(resp.data.message);
         });
     });
   </script>

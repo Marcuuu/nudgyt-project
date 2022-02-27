@@ -43,8 +43,10 @@ MongoClient.connect(process.env.DB_STRING, { useUnifiedTopology: true }, (err, c
     };
 
     try {
-      const newCustomerDoc = await usersDb.insertOne(customerDoc);
-      console.log(newCustomerDoc)
+      await usersDb.insertOne(customerDoc);
+      return res.status(200).json({
+        message: `Account successfully created for ${email}.`
+      });
     }
     catch (error) {
       return res.status(400).json({
